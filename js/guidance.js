@@ -185,6 +185,29 @@ function generateGuidance(inputs) {
     }
 
     // ============ DEDUCTIONS ============
+    // Homeowner-specific guidance
+    const mortgageInterest = preTaxData?.mortgageInterest || 0;
+    const propertyTaxes = preTaxData?.propertyTaxes || 0;
+    
+    if (totalIncome > 75000 && deductionType === 'standard') {
+        // Check if they might benefit from itemizing as a homeowner
+        const potentialMortgageInterest = totalIncome * 0.03; // Rough estimate
+        const potentialPropertyTax = 8000; // Average estimate
+        const potentialItemized = potentialMortgageInterest + Math.min(potentialPropertyTax, 10000);
+        const standardDeductions = getStandardDeductions();
+        const standardDed = standardDeductions[filingStatus];
+        
+        if (potentialItemized > standardDed * 0.7) {
+            guidance.deductions.push({
+                title: 'Homeowner Tax Benefits',
+                description: 'If you own a home, mortgage interest and property taxes may allow you to itemize. Switch to "Itemized" deductions above to enter your homeowner expenses and see if it saves more than the standard deduction.',
+                savings: null,
+                limit: `Your standard deduction: ${formatCurrency(standardDed)}`,
+                priority: 'high'
+            });
+        }
+    }
+
     if (deductionType === 'standard') {
         const potentialItemized = estimatePotentialItemized(totalIncome, state);
         const standardDeductions = getStandardDeductions();

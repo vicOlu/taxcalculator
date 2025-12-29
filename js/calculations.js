@@ -24,6 +24,118 @@ function formatInput(input) {
 }
 
 // ============================================
+// Itemized Deductions Calculation
+// ============================================
+
+function getItemizedDeductions(agi, filingStatus) {
+    // Homeowner deductions
+    const mortgageInterest = parseNumber(document.getElementById('mortgageInterest').value);
+    const mortgageInterestSecond = parseNumber(document.getElementById('mortgageInterestSecond').value);
+    const mortgagePoints = parseNumber(document.getElementById('mortgagePoints').value);
+    const pmiPremiums = parseNumber(document.getElementById('pmiPremiums').value);
+    const propertyTaxes = parseNumber(document.getElementById('propertyTaxes').value);
+    const homeOfficeExpenses = parseNumber(document.getElementById('homeOfficeExpenses').value);
+
+    // SALT components
+    const stateIncomeTaxPaid = parseNumber(document.getElementById('stateIncomeTaxPaid').value);
+    const localIncomeTaxPaid = parseNumber(document.getElementById('localIncomeTaxPaid').value);
+    const vehicleRegFees = parseNumber(document.getElementById('vehicleRegFees').value);
+
+    // Total SALT (capped at $10,000)
+    const totalSALT = propertyTaxes + stateIncomeTaxPaid + localIncomeTaxPaid + vehicleRegFees;
+    const cappedSALT = Math.min(totalSALT, 10000);
+
+    // Other deductions
+    const charitableCash = parseNumber(document.getElementById('charitableCash').value);
+    const charitableNonCash = parseNumber(document.getElementById('charitableNonCash').value);
+    const charitableStock = parseNumber(document.getElementById('charitableStock').value);
+    const medicalExpenses = parseNumber(document.getElementById('medicalExpenses').value);
+    const casualtyLosses = parseNumber(document.getElementById('casualtyLosses').value);
+    const gamblingLosses = parseNumber(document.getElementById('gamblingLosses').value);
+    const investmentInterest = parseNumber(document.getElementById('investmentInterest').value);
+
+    // Medical expenses only deductible above 7.5% AGI threshold
+    const medicalThreshold = agi * 0.075;
+    const deductibleMedical = Math.max(0, medicalExpenses - medicalThreshold);
+
+    // Total charitable (with AGI limits)
+    const maxCashCharity = agi * 0.60;
+    const maxStockCharity = agi * 0.30;
+    const cappedCashCharity = Math.min(charitableCash + charitableNonCash, maxCashCharity);
+    const cappedStockCharity = Math.min(charitableStock, maxStockCharity);
+    const totalCharitable = cappedCashCharity + cappedStockCharity;
+
+    // Total mortgage interest (combined limit is on $750K debt)
+    const totalMortgageInterest = mortgageInterest + mortgageInterestSecond + mortgagePoints + pmiPremiums;
+
+    // Calculate total itemized
+    const total = cappedSALT + totalMortgageInterest + totalCharitable + deductibleMedical + 
+                  casualtyLosses + gamblingLosses + investmentInterest + homeOfficeExpenses;
+
+    return {
+        total,
+        breakdown: {
+            salt: cappedSALT,
+            saltUncapped: totalSALT,
+            mortgageInterest: totalMortgageInterest,
+            charitable: totalCharitable,
+            medical: deductibleMedical,
+            medicalRaw: medicalExpenses,
+            casualty: casualtyLosses,
+            gambling: gamblingLosses,
+            investmentInterest: investmentInterest,
+            homeOffice: homeOfficeExpenses
+        }
+    };
+}
+
+function updateItemizedTotals() {
+    // Get a rough AGI estimate for threshold calculations
+    const grossIncome = parseNumber(document.getElementById('grossIncome').value);
+    const seIncome = parseNumber(document.getElementById('selfEmploymentIncome').value);
+    const bizExpenses = parseNumber(document.getElementById('businessExpenses').value);
+    const otherIncome = parseNumber(document.getElementById('otherIncome').value);
+    const { total: preTax } = getPreTaxDeductions();
+    const roughAGI = grossIncome + Math.max(0, seIncome - bizExpenses) + otherIncome - preTax;
+
+    const filingStatus = document.getElementById('filingStatus').value;
+    const { total: itemizedTotal, breakdown } = getItemizedDeductions(roughAGI, filingStatus);
+
+    // Update SALT total display
+    document.getElementById('saltTotal').textContent = formatCurrency(breakdown.saltUncapped);
+    if (breakdown.saltUncapped > 10000) {
+        document.getElementById('saltTotal').style.color = 'var(--accent-amber)';
+    } else {
+        document.getElementById('saltTotal').style.color = 'var(--text-primary)';
+    }
+
+    // Update itemized total
+    document.getElementById('itemizedTotal').textContent = formatCurrency(itemizedTotal);
+
+    // Compare to standard deduction
+    const standardDeductions = getStandardDeductions();
+    const standardDed = standardDeductions[filingStatus];
+    document.getElementById('standardDeductionCompare').textContent = formatCurrency(standardDed);
+
+    // Show recommendation
+    const recommendation = document.getElementById('deductionRecommendation');
+    if (itemizedTotal > 0) {
+        if (itemizedTotal > standardDed) {
+            const savings = itemizedTotal - standardDed;
+            recommendation.className = 'itemized-recommendation use-itemized';
+            recommendation.innerHTML = `✓ Itemize! You'll save <strong>${formatCurrency(savings)}</strong> more than standard deduction`;
+        } else {
+            const difference = standardDed - itemizedTotal;
+            recommendation.className = 'itemized-recommendation use-standard';
+            recommendation.innerHTML = `Standard deduction is better by <strong>${formatCurrency(difference)}</strong>`;
+        }
+    } else {
+        recommendation.className = 'itemized-recommendation';
+        recommendation.textContent = 'Enter your deductions to see which option saves more';
+    }
+}
+
+// ============================================
 // Pre-Tax Deductions Calculation
 // ============================================
 
@@ -176,18 +288,14 @@ function calculateTax() {
 
     // Calculate deduction
     let deduction;
+    let itemizedBreakdown = null;
     const standardDeductions = getStandardDeductions();
     if (deductionType === 'standard') {
         deduction = standardDeductions[filingStatus];
     } else {
-        const salt = Math.min(parseNumber(document.getElementById('saltDeduction').value), 10000);
-        const mortgage = parseNumber(document.getElementById('mortgageInterest').value);
-        const charitable = parseNumber(document.getElementById('charitableContributions').value);
-        const medicalRaw = parseNumber(document.getElementById('medicalExpenses').value);
-        const medicalThreshold = agi * 0.075;
-        const medical = Math.max(0, medicalRaw - medicalThreshold);
-
-        deduction = salt + mortgage + charitable + medical;
+        const { total: itemizedTotal, breakdown } = getItemizedDeductions(agi, filingStatus);
+        itemizedBreakdown = breakdown;
+        deduction = itemizedTotal;
 
         // Use standard if higher
         if (standardDeductions[filingStatus] > deduction) {

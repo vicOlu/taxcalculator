@@ -55,6 +55,20 @@ document.addEventListener('DOMContentLoaded', function() {
         input.addEventListener('input', updatePreTaxTotal);
     });
 
+    // Itemized deduction live total
+    document.querySelectorAll('.itemized-input').forEach(input => {
+        input.addEventListener('input', updateItemizedTotals);
+        input.addEventListener('blur', function() {
+            formatInput(this);
+            updateItemizedTotals();
+        });
+    });
+
+    // Update itemized totals when filing status changes
+    document.getElementById('filingStatus').addEventListener('change', function() {
+        updateItemizedTotals();
+    });
+
     // Calculate on Enter key
     document.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
