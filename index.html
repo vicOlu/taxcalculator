@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Return Estimator | NJ & NY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Tax Return Estimator</h1>
+            <p class="subtitle">Federal + State Tax Calculator for New Jersey & New York</p>
+            <div class="tax-year-selector">
+                <span class="tax-year-label">Tax Year:</span>
+                <div class="tax-year-toggle">
+                    <button class="tax-year-btn" data-year="2024">2024</button>
+                    <button class="tax-year-btn active" data-year="2025">2025</button>
+                    <button class="tax-year-btn" data-year="2026">2026</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="calculator-grid">
+            <!-- Input Column -->
+            <div class="input-column">
+                <!-- Filing Information -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Filing Information
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label">Filing Status</label>
+                        <select id="filingStatus" class="form-select">
+                            <option value="single">Single</option>
+                            <option value="married">Married Filing Jointly</option>
+                            <option value="marriedSeparate">Married Filing Separately</option>
+                            <option value="hoh">Head of Household</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">State</label>
+                        <select id="state" class="form-select">
+                            <option value="NJ">New Jersey</option>
+                            <option value="NY">New York</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="nycGroup" style="display: none;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="nycResident">
+                            <span class="checkmark"></span>
+                            NYC Resident (additional city tax)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Income -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Income
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            W-2 Wages (Salary)
+                            <span class="tooltip" data-tip="Your gross salary from W-2 employment before any deductions">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="grossIncome" class="form-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            1099 / Self-Employment Income
+                            <span class="tooltip" data-tip="Gross income from freelance, contract, or business work (before expenses)">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="selfEmploymentIncome" class="form-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Business Expenses
+                            <span class="tooltip" data-tip="Deductible expenses for self-employment (equipment, supplies, home office, etc.)">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="businessExpenses" class="form-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Other Income
+                            <span class="tooltip" data-tip="Interest, dividends, capital gains, rental income, etc.">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="otherIncome" class="form-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pre-Tax Deductions -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" />
+                        </svg>
+                        Pre-Tax Deductions
+                        <span class="pretax-total">Total: <span class="pretax-total-value" id="pretaxTotal">$0</span></span>
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            401(k) / 403(b) Contributions
+                            <span class="tooltip" data-tip="Traditional pre-tax retirement contributions through your employer">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="retirement401k" class="form-input pretax-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Traditional IRA Contributions
+                            <span class="tooltip" data-tip="Contributions to a Traditional IRA (not Roth)">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="traditionalIRA" class="form-input pretax-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            HSA Contributions
+                            <span class="tooltip" data-tip="Health Savings Account contributions (requires high-deductible health plan)">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="hsaContributions" class="form-input pretax-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Health Insurance Premiums
+                            <span class="tooltip" data-tip="Pre-tax health insurance premiums deducted from your paycheck">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="healthPremiums" class="form-input pretax-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            FSA Contributions
+                            <span class="tooltip" data-tip="Flexible Spending Account for health or dependent care expenses">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="fsaContributions" class="form-input pretax-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Other Pre-Tax Deductions
+                            <span class="tooltip" data-tip="Commuter benefits, parking, transit, etc.">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="otherPreTax" class="form-input pretax-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deductions -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        Deductions
+                    </h2>
+
+                    <div class="toggle-group">
+                        <button class="toggle-btn active" data-type="standard">Standard Deduction</button>
+                        <button class="toggle-btn" data-type="itemized">Itemized</button>
+                    </div>
+
+                    <div id="itemizedFields" class="itemized-fields hidden">
+                        <div class="form-group">
+                            <label class="form-label">
+                                State & Local Taxes (SALT)
+                                <span class="tooltip" data-tip="Property, income, and sales taxes - capped at $10,000 federal">?</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">$</span>
+                                <input type="text" id="saltDeduction" class="form-input" placeholder="0" inputmode="numeric">
+                            </div>
+                            <span class="input-note">Federal cap: $10,000</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Mortgage Interest</label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">$</span>
+                                <input type="text" id="mortgageInterest" class="form-input" placeholder="0" inputmode="numeric">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Charitable Contributions</label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">$</span>
+                                <input type="text" id="charitableContributions" class="form-input" placeholder="0" inputmode="numeric">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Medical Expenses
+                                <span class="tooltip" data-tip="Only amounts exceeding 7.5% of AGI are deductible">?</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">$</span>
+                                <input type="text" id="medicalExpenses" class="form-input" placeholder="0" inputmode="numeric">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Withholdings -->
+                <div class="card">
+                    <h2 class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        Tax Withholdings
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Federal Tax Withheld
+                            <span class="tooltip" data-tip="W-2 Box 2 - Federal income tax withheld">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="federalWithheld" class="form-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            State Tax Withheld
+                            <span class="tooltip" data-tip="W-2 Box 17 - State income tax withheld">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="stateWithheld" class="form-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="cityWithheldGroup" style="display: none;">
+                        <label class="form-label">
+                            NYC Tax Withheld
+                            <span class="tooltip" data-tip="W-2 Box 19 - Local/city income tax withheld">?</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="text" id="cityWithheld" class="form-input" placeholder="0" inputmode="numeric">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="calculate-btn" onclick="calculateTax()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    Calculate Tax Estimate
+                </button>
+            </div>
+
+            <!-- Results Column -->
+            <div class="results-column">
+                <div class="card results-card" id="resultsCard">
+                    <h2 class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        Tax Estimate
+                        <span class="state-indicator" id="stateIndicator">NJ</span>
+                        <span class="state-indicator" id="yearIndicator" style="margin-left: 0.5rem;">2025</span>
+                    </h2>
+
+                    <div class="result-section">
+                        <h3 class="result-section-title">Income Summary</h3>
+                        <div class="result-row">
+                            <span class="result-label">Gross Income</span>
+                            <span class="result-value" id="resultGrossIncome">$0</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Adjustments</span>
+                            <span class="result-value" id="resultAdjustments">-$0</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Adjusted Gross Income</span>
+                            <span class="result-value" id="resultAGI">$0</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Deduction</span>
+                            <span class="result-value" id="resultDeduction">-$0</span>
+                        </div>
+                        <div class="result-row highlight">
+                            <span class="result-label">Taxable Income</span>
+                            <span class="result-value" id="resultTaxableIncome">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="result-section">
+                        <h3 class="result-section-title">Federal Tax</h3>
+                        <div class="result-row">
+                            <span class="result-label">Federal Income Tax</span>
+                            <span class="result-value" id="resultFederalTax">$0</span>
+                        </div>
+                        <div class="result-row" id="seTaxRow" style="display: none;">
+                            <span class="result-label">
+                                Self-Employment Tax
+                                <span class="tooltip" data-tip="15.3% SE tax (12.4% Social Security + 2.9% Medicare) on 92.35% of net SE income">?</span>
+                            </span>
+                            <span class="result-value" id="resultSETax">$0</span>
+                        </div>
+                        <div class="result-row" id="seDeductionRow" style="display: none;">
+                            <span class="result-label">SE Tax Deduction (50%)</span>
+                            <span class="result-value" id="resultSEDeduction">-$0</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Total Federal Tax</span>
+                            <span class="result-value" id="resultTotalFederalTax">$0</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Federal Withheld</span>
+                            <span class="result-value" id="resultFederalWithheld">$0</span>
+                        </div>
+                        <div class="result-row highlight">
+                            <span class="result-label">Federal Balance</span>
+                            <span class="result-value" id="resultFederalBalance">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="result-section">
+                        <h3 class="result-section-title" id="stateTaxTitle">State Tax (NJ)</h3>
+                        <div class="result-row">
+                            <span class="result-label">State Tax</span>
+                            <span class="result-value" id="resultStateTax">$0</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">State Withheld</span>
+                            <span class="result-value" id="resultStateWithheld">$0</span>
+                        </div>
+                        <div class="result-row highlight">
+                            <span class="result-label">State Balance</span>
+                            <span class="result-value" id="resultStateBalance">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="result-section hidden" id="nycTaxSection">
+                        <h3 class="result-section-title">NYC Tax</h3>
+                        <div class="result-row">
+                            <span class="result-label">NYC Tax</span>
+                            <span class="result-value" id="resultNYCTax">$0</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">NYC Withheld</span>
+                            <span class="result-value" id="resultNYCWithheld">$0</span>
+                        </div>
+                        <div class="result-row highlight">
+                            <span class="result-label">NYC Balance</span>
+                            <span class="result-value" id="resultNYCBalance">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="result-section total-section">
+                        <div class="total-row">
+                            <span class="total-label">Estimated Result</span>
+                            <span class="total-value" id="totalResult">$0</span>
+                        </div>
+                        <div id="resultDescription" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            Enter your information to see your estimate
+                        </div>
+                    </div>
+
+                    <div class="effective-rate">
+                        <div class="rate-value" id="effectiveRate">0%</div>
+                        <div class="rate-label">Effective Tax Rate (Federal + State + Local)</div>
+                    </div>
+                </div>
+
+                <div class="card guidance-card hidden" id="guidanceCard">
+                    <h2 class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        Tax Reduction Strategies
+                    </h2>
+
+                    <div class="guidance-summary" id="guidanceSummary">
+                        <div class="guidance-summary-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="guidance-summary-text">
+                            <div class="guidance-summary-value" id="potentialSavings">$0</div>
+                            <div class="guidance-summary-label">Potential annual tax savings identified</div>
+                        </div>
+                    </div>
+
+                    <div class="guidance-intro" id="guidanceIntro">
+                        Based on your income and current deductions, here are personalized strategies to reduce your tax liability.
+                    </div>
+
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="immediate">Immediate Actions</button>
+                        <button class="tab-btn" data-tab="retirement">Retirement</button>
+                        <button class="tab-btn" data-tab="deductions">Deductions</button>
+                        <button class="tab-btn" data-tab="planning">Tax Planning</button>
+                    </div>
+
+                    <div id="immediateTab" class="tab-content active"></div>
+                    <div id="retirementTab" class="tab-content"></div>
+                    <div id="deductionsTab" class="tab-content"></div>
+                    <div id="planningTab" class="tab-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Disclaimer:</strong> This calculator provides estimates only and should not be considered tax advice. 
+            Actual tax liability may vary based on credits, additional income sources, and other factors. 
+            Consult a qualified tax professional for accurate tax guidance.
+        </div>
+    </div>
+
+    <script src="js/tax-data.js"></script>
+    <script src="js/calculations.js"></script>
+    <script src="js/guidance.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
