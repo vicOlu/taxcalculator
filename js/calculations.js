@@ -449,6 +449,38 @@ function calculateTax() {
     const { guidance, totalPotentialSavings } = generateGuidance(guidanceInputs);
     renderGuidance(guidance, totalPotentialSavings);
 
+    // Store results for PDF export
+    lastCalculationResults = {
+        taxYear: selectedTaxYear,
+        filingStatus: filingStatus === 'married' ? 'Married Filing Jointly' : 
+                      filingStatus === 'marriedSeparate' ? 'Married Filing Separately' :
+                      filingStatus === 'hoh' ? 'Head of Household' : 'Single',
+        state,
+        w2Income: grossIncome,
+        selfEmploymentIncome: netSelfEmploymentIncome,
+        schedule1Income: netSelfEmploymentIncome + otherIncome,
+        otherIncome,
+        grossIncome: totalIncome,
+        adjustments: preTaxDeductions + seDeduction,
+        agi,
+        deduction,
+        qbiDeduction: 0, // Add QBI logic if needed
+        taxableIncome: federalTaxableIncome,
+        federalTax,
+        selfEmploymentTax: seTax,
+        federalWithheld,
+        stateTaxableIncome,
+        stateTax,
+        stateWithheld,
+        nycTax,
+        nycWithheld: cityWithheld,
+        totalBalance,
+        effectiveRate
+    };
+
+    // Show export button
+    document.getElementById('exportBtn').classList.remove('hidden');
+
     // Animate results
     document.getElementById('resultsCard').classList.add('animate-in');
 }

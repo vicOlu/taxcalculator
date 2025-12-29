@@ -6,6 +6,17 @@ A comprehensive tax calculator for New Jersey and New York residents, featuring 
 
 ## Features
 
+### W-2 Field Guidance
+- **Helpful tooltips** on each field showing which W-2 box to reference
+- Box 1 (Wages), Box 2 (Federal Tax), Box 12 codes (401k, HSA), Box 17 (State Tax), Box 19 (Local Tax)
+- No confusing OCR - just clear guidance for manual entry
+
+### 📄 Export 1040 Summary (PDF)
+- **One-click PDF export** after calculating taxes
+- Maps all values to **Form 1040 line numbers** (Lines 1a, 9, 11, 12, 15, 16, 24, 25a, 33, 34/37)
+- Includes state tax summary for NJ/NY
+- Professional format for reference when filing
+
 ### Tax Calculations
 - **Federal Tax**: 7 progressive brackets (10% - 37%) with accurate 2024-2026 rates
 - **State Tax**: New Jersey and New York state tax brackets
@@ -89,6 +100,11 @@ tax-estimator/
 │   └── app.js          # UI event handlers
 └── README.md
 ```
+
+## External Dependencies
+
+- **jsPDF** - Client-side PDF generation for 1040 summary export
+- **Google Fonts** - DM Sans & JetBrains Mono
 
 ## Usage
 
