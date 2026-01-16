@@ -923,3 +923,220 @@ body::before {
         font-size: 0.8rem;
     }
 }
+
+/* ============================================
+   W-2 Reference Guide
+   ============================================ */
+
+.w2-guide-card {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.w2-guide-header {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.w2-guide-header:hover {
+    color: var(--accent-blue);
+}
+
+.w2-guide-chevron {
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.w2-guide-chevron.rotated {
+    transform: rotate(180deg);
+}
+
+.w2-guide-content {
+    display: none;
+    padding-top: 1rem;
+    animation: slideDown 0.3s ease;
+}
+
+.w2-guide-content.expanded {
+    display: block;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.w2-guide-intro {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.w2-box-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.w2-box-item {
+    background: var(--bg-input);
+    border-radius: 8px;
+    padding: 0.75rem;
+    border-left: 3px solid var(--accent-blue);
+}
+
+.w2-box-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: var(--accent-blue);
+    font-size: 0.9rem;
+}
+
+.w2-box-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0.25rem 0;
+}
+
+.w2-box-field {
+    font-size: 0.85rem;
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+.w2-box-codes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.w2-code {
+    background: var(--bg-card);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.w2-code strong {
+    color: var(--accent-amber);
+}
+
+/* Visual W-2 Form Preview */
+.w2-visual {
+    margin-top: 1rem;
+}
+
+.w2-form-preview {
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 4px;
+    padding: 0.75rem;
+    max-width: 500px;
+}
+
+.w2-form-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #333;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
+}
+
+.w2-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+}
+
+.w2-cell {
+    border: 1px solid #ccc;
+    padding: 0.4rem;
+    background: #f9f9f9;
+    min-height: 40px;
+}
+
+.w2-cell-wide {
+    grid-column: span 2;
+}
+
+.w2-cell-highlight {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: #3b82f6;
+}
+
+.w2-cell-box {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.7rem;
+    color: #1e40af;
+}
+
+.w2-cell-label {
+    display: block;
+    font-size: 0.65rem;
+    color: #555;
+    line-height: 1.2;
+}
+
+.w2-guide-note {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.w2-guide-note strong {
+    color: var(--accent-green);
+}
+
+/* Inline W-2 Box Reference Badges */
+.box-ref {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.25));
+    color: var(--accent-blue);
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 600px) {
+    .w2-box-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .w2-form-preview {
+        max-width: 100%;
+    }
+    
+    .w2-form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .w2-cell-wide {
+        grid-column: span 1;
+    }
+}

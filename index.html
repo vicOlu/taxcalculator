@@ -64,6 +64,113 @@
                     </div>
                 </div>
 
+                <!-- W-2 Reference Guide -->
+                <div class="card w2-guide-card">
+                    <h2 class="card-title w2-guide-header" onclick="toggleW2Guide()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        W-2 Reference Guide
+                        <svg class="w2-guide-chevron" id="w2GuideChevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </h2>
+                    <div class="w2-guide-content" id="w2GuideContent">
+                        <p class="w2-guide-intro">Use this guide to find the right values on your W-2 form:</p>
+                        
+                        <div class="w2-box-grid">
+                            <div class="w2-box-item">
+                                <div class="w2-box-number">Box 1</div>
+                                <div class="w2-box-label">Wages, tips, other compensation</div>
+                                <div class="w2-box-field">→ W-2 Wages (Salary)</div>
+                            </div>
+                            
+                            <div class="w2-box-item">
+                                <div class="w2-box-number">Box 2</div>
+                                <div class="w2-box-label">Federal income tax withheld</div>
+                                <div class="w2-box-field">→ Federal Tax Withheld</div>
+                            </div>
+                            
+                            <div class="w2-box-item">
+                                <div class="w2-box-number">Box 12</div>
+                                <div class="w2-box-label">See codes below</div>
+                                <div class="w2-box-codes">
+                                    <span class="w2-code"><strong>D</strong> = 401(k)</span>
+                                    <span class="w2-code"><strong>E</strong> = 403(b)</span>
+                                    <span class="w2-code"><strong>W</strong> = HSA</span>
+                                    <span class="w2-code"><strong>DD</strong> = Health insurance cost</span>
+                                </div>
+                            </div>
+                            
+                            <div class="w2-box-item">
+                                <div class="w2-box-number">Box 17</div>
+                                <div class="w2-box-label">State income tax withheld</div>
+                                <div class="w2-box-field">→ State Tax Withheld</div>
+                            </div>
+                            
+                            <div class="w2-box-item">
+                                <div class="w2-box-number">Box 19</div>
+                                <div class="w2-box-label">Local income tax withheld</div>
+                                <div class="w2-box-field">→ NYC Tax Withheld</div>
+                            </div>
+                        </div>
+                        
+                        <div class="w2-visual">
+                            <div class="w2-form-preview">
+                                <div class="w2-form-title">W-2 Wage and Tax Statement</div>
+                                <div class="w2-form-grid">
+                                    <div class="w2-cell w2-cell-highlight" data-box="1">
+                                        <span class="w2-cell-box">1</span>
+                                        <span class="w2-cell-label">Wages, tips, compensation</span>
+                                    </div>
+                                    <div class="w2-cell w2-cell-highlight" data-box="2">
+                                        <span class="w2-cell-box">2</span>
+                                        <span class="w2-cell-label">Federal tax withheld</span>
+                                    </div>
+                                    <div class="w2-cell">
+                                        <span class="w2-cell-box">3</span>
+                                        <span class="w2-cell-label">Social security wages</span>
+                                    </div>
+                                    <div class="w2-cell">
+                                        <span class="w2-cell-box">4</span>
+                                        <span class="w2-cell-label">SS tax withheld</span>
+                                    </div>
+                                    <div class="w2-cell">
+                                        <span class="w2-cell-box">5</span>
+                                        <span class="w2-cell-label">Medicare wages</span>
+                                    </div>
+                                    <div class="w2-cell">
+                                        <span class="w2-cell-box">6</span>
+                                        <span class="w2-cell-label">Medicare tax withheld</span>
+                                    </div>
+                                    <div class="w2-cell w2-cell-wide w2-cell-highlight" data-box="12">
+                                        <span class="w2-cell-box">12a-d</span>
+                                        <span class="w2-cell-label">Codes (D, E, W, DD...)</span>
+                                    </div>
+                                    <div class="w2-cell">
+                                        <span class="w2-cell-box">16</span>
+                                        <span class="w2-cell-label">State wages</span>
+                                    </div>
+                                    <div class="w2-cell w2-cell-highlight" data-box="17">
+                                        <span class="w2-cell-box">17</span>
+                                        <span class="w2-cell-label">State tax</span>
+                                    </div>
+                                    <div class="w2-cell">
+                                        <span class="w2-cell-box">18</span>
+                                        <span class="w2-cell-label">Local wages</span>
+                                    </div>
+                                    <div class="w2-cell w2-cell-highlight" data-box="19">
+                                        <span class="w2-cell-box">19</span>
+                                        <span class="w2-cell-label">Local tax</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p class="w2-guide-note">💡 <strong>Tip:</strong> If you have multiple W-2s, add the values from each form together for each box.</p>
+                    </div>
+                </div>
+
                 <!-- Income -->
                 <div class="card">
                     <h2 class="card-title">
@@ -75,7 +182,7 @@
 
                     <div class="form-group">
                         <label class="form-label">
-                            W-2 Wages (Salary)
+                            W-2 Wages (Salary) <span class="box-ref">Box 1</span>
                             <span class="tooltip" data-tip="W-2 Box 1: Wages, tips, other compensation. Your total taxable wages before any deductions.">?</span>
                         </label>
                         <div class="input-wrapper">
@@ -130,7 +237,7 @@
 
                     <div class="form-group">
                         <label class="form-label">
-                            401(k) / 403(b) Contributions
+                            401(k) / 403(b) Contributions <span class="box-ref">Box 12 (D/E)</span>
                             <span class="tooltip" data-tip="W-2 Box 12 Code D (401k) or Code E (403b): Pre-tax retirement contributions through your employer">?</span>
                         </label>
                         <div class="input-wrapper">
@@ -152,7 +259,7 @@
 
                     <div class="form-group">
                         <label class="form-label">
-                            HSA Contributions
+                            HSA Contributions <span class="box-ref">Box 12 (W)</span>
                             <span class="tooltip" data-tip="W-2 Box 12 Code W: HSA contributions (includes employer contributions). Requires HDHP.">?</span>
                         </label>
                         <div class="input-wrapper">
@@ -453,7 +560,7 @@
 
                     <div class="form-group">
                         <label class="form-label">
-                            Federal Tax Withheld
+                            Federal Tax Withheld <span class="box-ref">Box 2</span>
                             <span class="tooltip" data-tip="W-2 Box 2 - Federal income tax withheld">?</span>
                         </label>
                         <div class="input-wrapper">
@@ -464,7 +571,7 @@
 
                     <div class="form-group">
                         <label class="form-label">
-                            State Tax Withheld
+                            State Tax Withheld <span class="box-ref">Box 17</span>
                             <span class="tooltip" data-tip="W-2 Box 17 - State income tax withheld">?</span>
                         </label>
                         <div class="input-wrapper">
@@ -475,7 +582,7 @@
 
                     <div class="form-group" id="cityWithheldGroup" style="display: none;">
                         <label class="form-label">
-                            NYC Tax Withheld
+                            NYC Tax Withheld <span class="box-ref">Box 19</span>
                             <span class="tooltip" data-tip="W-2 Box 19 - Local/city income tax withheld">?</span>
                         </label>
                         <div class="input-wrapper">

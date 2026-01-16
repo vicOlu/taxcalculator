@@ -3,6 +3,18 @@
  */
 
 // ============================================
+// W-2 Guide Toggle
+// ============================================
+
+function toggleW2Guide() {
+    const content = document.getElementById('w2GuideContent');
+    const chevron = document.getElementById('w2GuideChevron');
+    
+    content.classList.toggle('expanded');
+    chevron.classList.toggle('rotated');
+}
+
+// ============================================
 // Event Listeners
 // ============================================
 

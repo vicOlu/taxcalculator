@@ -7,9 +7,11 @@ A comprehensive tax calculator for New Jersey and New York residents, featuring 
 ## Features
 
 ### W-2 Field Guidance
+- **Collapsible W-2 Reference Guide** with visual form preview showing which boxes to use
+- **Inline box badges** next to fields (e.g., "Box 1", "Box 2", "Box 12 (D/E)")
 - **Helpful tooltips** on each field showing which W-2 box to reference
 - Box 1 (Wages), Box 2 (Federal Tax), Box 12 codes (401k, HSA), Box 17 (State Tax), Box 19 (Local Tax)
-- No confusing OCR - just clear guidance for manual entry
+- Visual W-2 form diagram highlighting the boxes you need
 
 ### 📄 Export 1040 Summary (PDF)
 - **One-click PDF export** after calculating taxes
